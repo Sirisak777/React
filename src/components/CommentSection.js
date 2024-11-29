@@ -6,18 +6,17 @@ const CommentSection = ({ post, posts, setPosts, user }) => {
   const addComment = () => {
     if (!user) return alert('Please log in to comment!');
     const updatedPosts = posts.map((p) =>
-      p === post ? { ...p, comments: [...p.comments, comment] } : p
+      p === post ? { ...p, comments: [...p.comments, { user: user.email, comment }] } : p
     );
     setPosts(updatedPosts);
     setComment('');
   };
-  
 
   return (
     <div>
       <h4>Comments</h4>
       {post.comments.map((c, index) => (
-        <p key={index}>{c}</p>
+        <p key={index}><strong>{c.user}:</strong> {c.comment}</p>
       ))}
       {user && (
         <>

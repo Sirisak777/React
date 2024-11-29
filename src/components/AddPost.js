@@ -13,6 +13,7 @@ const AddPost = ({ addPost, user }) => {
       author: user.email, // เก็บ email หรือ id ของผู้ใช้ในโพสต์
       likes: 0,
       comments: [],
+      likedBy: [], // อาร์เรย์ที่จะเก็บอีเมล์ของผู้ที่ไลค์
     };
 
     addPost(newPost);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PostItem from './PostItem';
 import AddPost from './AddPost';
-import './PostList.css'; // เพิ่มการนำเข้า CSS
+import './PostList.css';
 
 const PostList = ({ posts, setPosts, user }) => {
   const addPost = (newPost) => {
@@ -21,15 +21,15 @@ const PostList = ({ posts, setPosts, user }) => {
 
       {/* แสดงโพสต์ */}
       <div className="posts-list">
-          {posts.map((post, index) => (
-            <PostItem
-              key={index}
-              post={post}
-              posts={posts}
-              setPosts={setPosts}
-              user={user}
-            />
-          ))}
+        {posts.map((post, index) => (
+          <PostItem
+            key={index}
+            post={post}
+            posts={posts}
+            setPosts={setPosts}
+            user={user}
+          />
+        ))}
       </div>
     </div>
   );

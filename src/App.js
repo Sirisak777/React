@@ -30,7 +30,7 @@ const App = () => {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home posts={posts} user={user} setPosts={setPosts} />} />
+        <Route path="/" element={<Home posts={posts} setPosts={setPosts} user={user} />} />
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/posts" element={<PostList posts={posts} setPosts={setPosts} user={user} />} />

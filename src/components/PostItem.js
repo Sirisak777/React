@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EditPost from './EditPost';
 import CommentSection from './CommentSection';
 
@@ -7,10 +7,23 @@ const PostItem = ({ post, posts, setPosts, user }) => {
   const [editedTitle, setEditedTitle] = useState(post.title);
   const [editedContent, setEditedContent] = useState(post.content);
 
-  const likePost = () => {
+  // ฟังก์ชันสำหรับการเพิ่มหรือลดไลค์
+  const toggleLike = () => {
     if (!user) return alert('Please log in to like posts!');
+
+    // ตรวจสอบว่า user นี้ไลค์โพสต์นี้แล้วหรือยัง
+    const hasLiked = post.likedBy.includes(user.email);
+
     const updatedPosts = posts.map((p) =>
-      p === post ? { ...p, likes: p.likes + 1 } : p
+      p === post
+        ? {
+            ...p,
+            likes: hasLiked ? p.likes - 1 : p.likes + 1,  // ลดไลค์หากเคยไลค์แล้ว
+            likedBy: hasLiked
+              ? p.likedBy.filter((email) => email !== user.email)  // ลบอีเมลจาก likedBy
+              : [...p.likedBy, user.email],  // เพิ่มอีเมลไปที่ likedBy
+          }
+        : p
     );
     setPosts(updatedPosts);
   };
@@ -21,6 +34,11 @@ const PostItem = ({ post, posts, setPosts, user }) => {
     );
     setPosts(updatedPosts);
     setIsEditing(false); // กลับสู่โหมดแสดงปกติ
+  };
+
+  const deletePost = () => {
+    const updatedPosts = posts.filter((p) => p !== post); // ลบโพสต์ออกจากอาร์เรย์
+    setPosts(updatedPosts);
   };
 
   return (
@@ -41,16 +59,18 @@ const PostItem = ({ post, posts, setPosts, user }) => {
           <p>{post.content}</p>
           <p>Likes: {post.likes}</p>
 
-          {/* ถ้า user login แล้ว สามารถเพิ่มไลค์ได้ */}
+          {/* ถ้า user login แล้ว สามารถเพิ่ม/ลดไลค์ได้ */}
           {user && (
-            <button onClick={likePost}>Like</button>
+            <button onClick={toggleLike}>
+              {post.likedBy.includes(user.email) ? 'Unlike' : 'Like'}
+            </button>
           )}
 
           {/* แสดงปุ่มแก้ไขและลบเฉพาะโพสต์ของผู้ใช้ที่ล็อกอิน */}
           {user && post.author === user.email && (
             <>
               <button onClick={() => setIsEditing(true)}>Edit</button>
-              {/* ลบโพสต์ */}
+              <button onClick={deletePost}>Delete</button>
             </>
           )}
         </>
