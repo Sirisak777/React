@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './components/Home';
+import Login from './components/Login';
+import Register from './components/Register';
+import PostList from './components/PostList';
 
-function App() {
+const App = () => {
+  const [user, setUser] = useState(null); // เก็บสถานะของผู้ใช้
+  const [posts, setPosts] = useState([  // ตัวอย่างข้อมูลโพสต์
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <nav style={{ padding: '10px', backgroundColor: '#f4f4f4' }}>
+        <Link to="/" style={{ margin: '0 10px' }}>Home</Link>
+        {user ? (
+          <>
+            <Link to="/posts" style={{ margin: '0 10px' }}>Posts</Link>
+            <button onClick={() => setUser(null)} style={{ margin: '0 10px' }}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" style={{ margin: '0 10px' }}>Login</Link>
+            <Link to="/register" style={{ margin: '0 10px' }}>Register</Link>
+          </>
+        )}
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home posts={posts} user={user} setPosts={setPosts} />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/posts" element={<PostList posts={posts} setPosts={setPosts} user={user} />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
